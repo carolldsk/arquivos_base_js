@@ -1,0 +1,135 @@
+
+
+class Personagens {
+    constructor() {
+        this.data = [];
+    }
+
+    add(data){
+        this.data.push(data);
+        console.log(this.data);
+    }
+    listPersonsagens(){
+        let dados = [];
+        // first page
+        axios.get('https://swapi.dev/api/people/')
+        // Se der certo Then
+        .then( (response) => {
+
+            dados = response.data.results;
+
+            console.log(dados)
+
+            dados.map( (item) => {
+                console.log(`  Nome: ${item.name} - Sexo : ${item.gender}`)
+            });
+
+        })
+        // Se der errado Catch
+        .catch( (error) => 
+            console.warn(`Não foi possível resolver ${error.request.responseURL}, status ${error.request.status}`)
+        );
+    }
+
+}
+
+
+class ListaPersonagens extends Personagens {
+    constructor() {
+        //chama o constructor da classe pai
+        super();
+        this.usuario = 'carolzinha';
+    }
+    mostraUser(){
+        console.log(this.usuario);
+
+        let users = this.data;
+
+        users.map( (item, index) => {
+            console.log(` Posição: ${index} Nome: ${item}`)
+        });
+    }
+   
+}
+
+
+const Persons    = new Personagens();
+const MinhaLista = new ListaPersonagens();
+
+document.getElementById('novoTodo').onclick = () => {
+    MinhaLista.add('Novo todo3');
+}
+
+MinhaLista.mostraUser();
+Persons.add('Nova era');
+
+Persons.listPersonsagens()
+
+
+
+const array1 = [1,2,3,4];
+const array2 = [5,6,7,8];
+
+const usuario = {
+    name: 'Diego',
+    idade: 101,
+    habilidades: {
+        power: 'meter o loko',
+        ascendent: 'marte',
+        elemento: 'fogo'
+    }
+}
+
+// Desestruturação de variável
+
+const {nome, idade} = usuario; // cria novas variáveis a partir do objeto USUARIO
+
+console.log(`Olá meu nome é ${nome} e eu tenho ${idade} anos.`);
+
+
+// REST OPERATOR (SEMPRE VAI PEGAR O RESTO)
+
+const {nome, ...resto} = usuario; // cria a variavel NOME e o restante dos valores do objeto USUARIO vai para a variável RESTO 
+
+console.log(resto);
+
+
+// Quando você não sabe quantos parametros o usuário vai digitar
+function soma(...params) {
+    return params.reduce((total, valor) => total + valor); // vai pegar cada um dos parametros enviados, converter em variáveis e somar
+}
+
+console.log(soma(2,5,9,8));
+
+
+// SPREAD OPERATOR (JUNTA TUDO e REESCREVE QUANDO NECESSARIO)
+
+const array3 = [...array1, ...array2]; // Joga todo os conteudo dos dois array e sintetiza em um só
+
+console.log(array3);
+
+const usuario2 = {...usuario, habilidades: {power : 'meter muito o loko'}} // joga tudo o que tem no objeto USUARIO para USUARIO2, porém reescreve o conteúdo POWER
+
+console.log(usuario2);
+
+
+
+
+// Utilizando axios importado dentro do projeto com classes
+
+import axios from 'axios';
+
+class Api{
+    static async getUserInfo(user){
+        
+        try{
+            let response = await axios.get(`http://api.github.com/users/${user}`)
+            
+            console.log(response);
+        }
+        catch (error){
+            console.warn('Erro na Api')
+        }
+    }
+}
+Api.getUserInfo('carolldsk');

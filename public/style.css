@@ -1,0 +1,12 @@
+#repo-list .card{
+    width: 14.5em !important;
+    margin: 1em !important;
+}
+
+img {
+    width: 100%;
+}
+
+p{
+    font-size: smaller;
+}

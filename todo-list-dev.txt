@@ -1,0 +1,135 @@
+
+// Começando o projeto  com as linhas de comando :
+
+> yarn init
+> yarn add @babel/cli
+> yarn add @babel/preset-env
+> yarn add @babel/core
+
+
+// Em seguida é uma boa prática criar um arquivo gitignore ignorando a pasta node_modules
+
+
+- o próximo passo é criar o arquivo ".babelrc"
+
+- dentro do arquivo .babelrc crie o seguinte objeto :
+
+{
+    "presets":["@babel/preset-env"]
+}
+
+- note que o preset env irá ver que estamos trabalhando com o browser
+
+
+// dentro de package.json criar uma nova propriedade que cria comandos para que possamos rodar no terminal
+
+- Abra o package.json e insira as propriedades para gerar o bundle :
+
+"scripts":{
+    "dev": "babel ./main.js -o bundle.js -w"
+}
+
+ - Crie i arquivo "main.js" para que possamos testar a transpilação do babel
+
+// após inserir o script e o arquivo rode no terminal o comando :
+
+// ele irá transpilar o código escrito em "main.js" para uma versão compatível em todos os navegadores no arquivo "bundle.js"
+
+> yarn dev
+
+
+
+//incluindo o plugin  REST E SPREAD no babel com o comando :
+
+> yarn add @babel/plugin-proposal-object-rest-spread
+
+
+- Em seguida insira no arquivo ".babelrc" a referencia do plugin
+
+"plugins": [@babel/plugin-proposal-object-rest-spread]
+
+
+- no arquivo "package.json" altere o nome  "dependencies" para  "devDependencies" para organizarmos melhor quais sao as dependencias de desenvolvimento
+
+
+// criando webpack com o comando:
+
+> yarn add webpack webpack-cli -D
+
+- Em seguida cria um arquivo de configuração para o webpack "webpack.config.js"
+
+// Abra o arquivo "webpack.config.js" e joga o objeto abaixo:
+// o trecho abaixo já possui configs de apontamento para diretório, tem regex para pegar todos os arquivos JS dentro de src e transpilar no babel
+
+module.exports = {
+    entry: ['@babel/polyfill','./src/main.js'],
+    output: {
+        path: __dirname + '/public',
+        filename: 'bundle.js'
+    },
+    devServer:{
+        contentBase: __dirname + '/public'
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader:'babel-loader'
+                }
+            }
+        ]
+    }
+}
+
+// Apos incluir o objeto no webpack, inclua o loader do babel (o loader fica escutando se os JS tiveram alguma alteração) :
+
+> yarn add babel-loader @babel/core @babel/preset-env webpack -D 
+
+
+// instalando dev server para o webpack (vira um servidor mesmo, e da refresh automaticamente na tela após alteração)
+
+> yarn add webpack-dev-server -D
+
+
+- em seguida vá ao arquivo package.json e altere o script "dev" para rodar o webpack
+
+// já que incluimos o babel loader dentro do webpack e o server webpack, não precisamos mais do comando anterior dentro de scripts conforme abaixo:
+// também é possível criar o comando de build, para que o arquivo "bundle.js" seja criado fisicamente em ambiente prod
+
+"scripts": {
+    "dev": "webpack-dev-server --mode=development",
+    "build": "webpack --mode=production"
+}
+
+
+- crie uma pasta chamada "src" e jogue o arquivo "main.js" dentro dela, nessa pasta ficarão os arquivos que o webpack irá monitorar 
+
+- crie uma pasta chamada "public" para armazenar todos os arquivos que o webpack não irá monitorar , como : "index.html" e "style.css"
+
+
+
+// instalando plugin para o babel conseguir transpilar o async await
+
+> yarn add @babel/plugin-transform-async-to-generator -D
+
+> yarn add @babel/polyfill -D
+
+
+- em seguida altere o arquivo ".babel" com o seguinte objeto:
+
+"presets" : ["@babel/preset-env"],
+"plugins" : [
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-transform-async-to-generator",
+]
+
+
+// instalando axios na aplicacao
+> yarn add axios
+
+
+// Após essas configuracoes, você poderá rodar um servidor com o webpack, utilizando o comando:
+
+> yarn dev
